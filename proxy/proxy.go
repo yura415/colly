@@ -16,6 +16,7 @@ package proxy
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/url"
 	"sync/atomic"
@@ -33,6 +34,9 @@ func (r *roundRobinSwitcher) GetProxy(pr *http.Request) (*url.URL, error) {
 	atomic.AddUint32(&r.index, 1)
 	ctx := context.WithValue(pr.Context(), colly.ProxyURLKey, u.String())
 	*pr = *pr.WithContext(ctx)
+
+	fmt.Println("SETTING RANDOM PROXY FOR REQUEST", u.String())
+
 	return u, nil
 }
 
